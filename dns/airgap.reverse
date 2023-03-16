@@ -1,0 +1,35 @@
+; CLUSTER: vike
+; DOMAIN : airgap.lan
+$TTL    86400
+@       IN      SOA     bastion.airgap.lan. root.airgap.lan. (
+        20230126        ;Serial
+        3600            ;Refresh
+        1800            ;Retry
+        604800          ;Expire
+        86400           ;Minimum TTL
+)
+@       IN      NS      bastion.airgap.lan.
+;@       IN      PTR     airgap.lan.
+
+;bastion IN A 192.168.44.1
+; Bastion Node
+1      IN    PTR    bastion.airgap.lan.
+1      IN    PTR    registry.vike.airgap.lan.
+1      IN    PTR    api.vike.airgap.lan.
+1      IN    PTR    api-int.vike.airgap.lan.
+
+; Temp Bootstrap Node
+100    IN    PTR    bootstrap.vike.airgap.lan.
+
+; Control Plane Nodes
+101    IN    PTR    master-1.vike.airgap.lan.
+102    IN    PTR    master-2.vike.airgap.lan.
+103    IN    PTR    master-3.vike.airgap.lan.
+
+; Worker Nodes
+111    IN    PTR    worker-1.vike.airgap.lan.
+112    IN    PTR    worker-2.vike.airgap.lan.
+113    IN    PTR    worker-3.vike.airgap.lan.
+114    IN    PTR    worker-4.vike.airgap.lan.
+
+

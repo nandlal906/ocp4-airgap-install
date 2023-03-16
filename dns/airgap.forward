@@ -1,0 +1,51 @@
+; CLUSTER: vike
+; DOMAIN : airgap.lan
+$TTL 	86400
+@	IN 	SOA 	bastion.airgap.lan. root.airgap.lan. (
+	20230126 	;Serial
+	3600 		;Refresh
+	1800 		;Retry
+	604800 		;Expire
+	86400 		;Minimum TTL
+)
+@ 	IN 	NS 	bastion.airgap.lan.
+@ 	IN 	A 	192.168.44.1
+
+; OpenShift Internal SRV records
+_etcd-server-ssl._tcp.vike.airgap.lan.    86400     IN    SRV     0    10    2380    etcd-0.lab
+_etcd-server-ssl._tcp.vike.airgap.lan.    86400     IN    SRV     0    10    2380    etcd-1.lab
+_etcd-server-ssl._tcp.vike.airgap.lan.    86400     IN    SRV     0    10    2380    etcd-2.lab
+
+oauth-openshift.apps.vike.airgap.lan.     	    IN     A     192.168.44.1
+console-openshift-console.apps.vike.airgap.lan.     IN     A     192.168.44.1
+
+; Bastion Node
+bastion			   IN  A  192.168.44.1
+
+; Local Registry
+registry.vike.airgap.lan.  IN  A  192.168.44.1
+
+; OpenShift Internal - Load balancer
+api.vike.airgap.lan.       IN  A  192.168.44.1
+api-int.vike.airgap.lan.   IN  A  192.168.44.1
+*.apps.vike.airgap.lan.    IN  A  192.168.44.1
+
+; ETCD Cluster
+etcd-0.vike.airgap.lan.    IN  A  192.168.44.101
+etcd-1.vike.airgap.lan.    IN  A  192.168.44.102
+etcd-2.vike.airgap.lan.    IN  A  192.168.44.103
+
+
+; Temporary Bootstrap Node
+bootstrap.vike.airgap.lan. IN  A  192.168.44.100
+
+; Control Plane Nodes
+master-1.vike.airgap.lan.  IN  A  192.168.44.101
+master-2.vike.airgap.lan.  IN  A  192.168.44.102
+master-3.vike.airgap.lan.  IN  A  192.168.44.103
+
+; Worker Nodes
+worker-1.vike.airgap.lan.  IN  A  192.168.44.111
+worker-2.vike.airgap.lan.  IN  A  192.168.44.112
+worker-3.vike.airgap.lan.  IN  A  192.168.44.113
+worker-4.vike.airgap.lan.  IN  A  192.168.44.114

@@ -1,0 +1,75 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    storageclass.kubernetes.io/is-default-class: 'false'
+  name: mysql-stat-sc
+parameters:
+  encryption: 'false'
+  fstype: vxfs
+  layout: stripe-mirror
+  mediaType: hdd
+  nmirror: '2'
+provisioner: org.veritas.infoscale
+reclaimPolicy: Delete
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-stat
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  serviceName: "mysql-stat"
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: mysql
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: mysql
+    spec:
+      containers:
+      - name: mysql-app
+        image: mysql:latest
+        ports:
+          - containerPort: 3306
+        env:
+        - name: MYSQL_USER
+          value: mysqladmin
+        - name: MYSQL_PASSWORD
+          value: Vcs12345
+        - name: MYSQL_ROOT_PASSWORD
+          value: Vcs12345
+        - name: MYSQL_DATABASE
+          value: mysql
+        volumeMounts:
+         - name: data
+           mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        storageClassName: "mysql-stat-sc"
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-stat
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: wordpress
+    tier: mysql
+  clusterIP: None

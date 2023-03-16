@@ -1,0 +1,38 @@
+apiVersion: v1
+baseDomain: airgap.lan
+compute:
+  - hyperthreading: Enabled
+    name: worker
+    replicas: 0 # Must be set to 0 for User Provisioned Installation as worker nodes will be manually deployed.
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 3
+metadata:
+  name: vike # Cluster name
+networking:
+  clusterNetwork:
+    - cidr: 10.7.0.0/16
+      hostPrefix: 23
+  networkType: OpenShiftSDN
+  serviceNetwork:
+    - 172.30.0.0/16
+platform:
+  none: {}
+fips: false
+pullSecret: '{"auths":{"registry.vike.airgap.lan:8443":{"auth":"aW5pdDpjaGFuZ2VtZQ==","email":"root@bastion.airgap.lan"}}}'
+sshKey: 'ssh-rsa AAAAB3NzaC1yc2EA...= root@bastion'
+additionalTrustBundle: |
+     -----BEGIN CERTIFICATE-----
+     /+5mAn84Nm5/Dl3aNyinCSSis1Wy0PGxFpug40rWrZqptGm2a2ZzBrvIGskqAF/
+     FpUrnDMpbmshiv09MOU6owbETBvEsBaZMAcXzraxz7IMDGevLEl0defOZgtw4zTS
+     ...
+     -----END CERTIFICATE-----
+imageContentSources:
+- mirrors:
+  - registry.vike.airgap.lan:8443/ocp/openshift4
+  source: quay.io/openshift-release-dev/ocp-release
+- mirrors:
+  - registry.vike.airgap.lan:8443/ocp/openshift4
+  source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+
