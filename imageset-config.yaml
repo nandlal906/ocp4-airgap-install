@@ -1,0 +1,47 @@
+kind: ImageSetConfiguration
+apiVersion: mirror.openshift.io/v1alpha2
+storageConfig:
+  registry:
+    imageURL: registry.vike.airgap.lan:5000/operators
+    skipTLS: false
+mirror:
+  platform:
+    channels:
+    - name: stable-4.11
+      type: ocp
+  operators:
+  - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.11
+    packages:
+    - name: nfd
+      channels:
+      - name: stable
+    - name: openshift-special-resource-operator
+      channels:
+      - name: stable
+    - name: openshift-cert-manager-operator
+      channels:
+      - name: tech-preview
+  - catalog: registry.redhat.io/redhat/certified-operator-index:v4.11
+    packages:
+    - name: infoscale-sds-operator
+      channels:
+      - name: stable
+    - name: infoscale-licensing-operator
+      channels:
+      - name: stable
+    - name: infoscale-dr-manager
+      channels:
+      - name: stable
+
+  additionalImages:
+  - name: registry.connect.redhat.com/veritas-technologies/infoscale-sds:8.0.200-rhel8.6-4.18.0-372.26.1.el8_6.x86_64
+  - name: registry.connect.redhat.com/veritas-technologies/infoscale-csi:2.0.200-rhel8
+  - name: registry.connect.redhat.com/veritas-technologies/infoscale-fencing:2.0.200-rhel8
+  - name: registry.redhat.io/openshift4/ose-csi-external-provisioner-rhel8:v4.10
+  - name: registry.redhat.io/openshift4/ose-csi-external-attacher:v4.7
+  - name: registry.redhat.io/openshift4/ose-csi-external-resizer-rhel8:v4.7
+  - name: registry.redhat.io/openshift4/ose-csi-external-snapshotter-rhel8:v4.10
+  - name: registry.redhat.io/openshift4/ose-csi-driver-registrar:v4.3
+  - name: ghcr.io/kvaps/kube-fencing-controller:v2.3.0
+  - name: ghcr.io/kvaps/kube-fencing-switcher:v2.3.0
+
