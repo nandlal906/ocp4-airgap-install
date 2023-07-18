@@ -1,0 +1,22 @@
+
+Follow these steps for cluster wide  chrony config on OCP 4.11 :
+--------------------------------------------------------------
+curl https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane --output butane
+chmod 777 ./butane
+wget http://r7515-158v15.vxindia.veritas.com/logs/container/openshift-mco/4.11/99-master-chrony.bu
+wget http://r7515-158v15.vxindia.veritas.com/logs/container/openshift-mco/4.11/99-worker-chrony.bu
+./butane 99-worker-chrony.bu -o 99-worker-chrony.yaml
+./butane 99-master-chrony.bu -o 99-master-chrony.yaml
+oc apply -f ./99-worker-chrony.yaml
+oc apply -f ./99-master-chrony.yaml
+
+wait for sometime ..this will reboot nodes
+
+IF operator pods crash
+----------------------
+oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' > global_pull_secret.yaml
+oc registry login --registry="registry.redhat.io" --auth-basic="vtas-eng:V4La@24!" --to=global_pull_secret.yaml
+oc registry login --registry="registry.connect.redhat.com" --auth-basic="vtas-eng:V4La@24!" --to=global_pull_secret.yaml
+oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=global_pull_secret.yaml
+
+ 
